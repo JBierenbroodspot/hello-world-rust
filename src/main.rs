@@ -1,6 +1,7 @@
 use std::io;
 
 pub mod hello_world_but_in_another_file;
+pub mod guess_the_number;
 
 /// Takes a `&str` and runs a function based on specific matching values.
 /// 
@@ -17,6 +18,8 @@ pub mod hello_world_but_in_another_file;
 /// is returned.
 fn run_selection(selection: &str) -> bool {
 
+    // TODO(JBierenbroodspot): Find a way to store which module to use so it can
+    //                         be ran outside of the main loop.
     // String returned by `read_line()` include a trailing newline character.
     match selection.trim() {
         "1" => hello_world_but_in_another_file::run_self(),

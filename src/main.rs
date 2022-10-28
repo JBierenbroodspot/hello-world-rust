@@ -1,3 +1,5 @@
+pub mod hello_world_but_in_another_file;
+
 fn main() {
-    println!("Hello, world!");
+    hello_world_but_in_another_file::run_self();
 }

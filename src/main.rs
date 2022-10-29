@@ -25,11 +25,12 @@ type FunctionMap = collections::HashMap<String, fn()>;
 /// 
 /// Returns a borrowed function if the key exists within the map, otherwise 
 /// `None` is returned.
-fn get_from_fn_map<'a>(key: Option<&str>, 
+fn get_from_fn_map<'a>(key: &str, 
+                       // `'a` is a lifetime annotation. In this case it shows
+                       // that `&'a fn()` is borrowed from `function_map` and
+                       // not `key`.
                        function_map: &'a FunctionMap) -> Option<&'a fn()> {  
-    // TODO(JBierenbroodspot): Remove trimming.     
-    return key.map(|s| s.trim())
-                    .and_then(|s| function_map.get(s))
+    return function_map.get(key);
 }
 
 fn main() -> io::Result<()> {
@@ -57,7 +58,7 @@ fn main() -> io::Result<()> {
                    // of type `Some(T)`. Otherwise it id ignored and the value
                    // of the previous statement will be returned, which will be
                    // `None`.
-                   .and(get_from_fn_map(Some(&user_input), 
+                   .and(get_from_fn_map(&user_input, 
                                            &function_map));
     }
 

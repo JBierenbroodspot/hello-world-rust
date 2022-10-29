@@ -32,6 +32,22 @@ fn evaluate_guess(guess: u8, to_guess: u8) -> u8 {
     return 2;
 }
 
+/// Converts string to a unsigned 8 bit integer.
+/// 
+/// # Arguments
+/// 
+/// * `guess` - A borrowed string, or `None`, that can be parsed into an 
+///             unsigned 8 bit integer.
+/// 
+/// # Return value
+/// 
+/// If `guess` can be succesfully parsed into a unsigned 8 bit integer then 
+/// `Some(u8)` will be returned, otherwise `None` is returned.
+fn guess_to_u8(guess: Option<&str>) -> Option<u8> {
+    return guess.map(|s| s.parse::<u8>())?
+                .ok();
+}
+
 pub fn run_self() {
     let stdin: io::Stdin = io::stdin();
 
@@ -47,7 +63,7 @@ pub fn run_self() {
         match stdin.read_line(&mut user_input) {
             Err(_) => stop = false,
             Ok(_) => {
-
+ 
             }
         }
     }

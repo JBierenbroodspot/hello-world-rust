@@ -75,6 +75,7 @@ pub fn run_self() {
 
     let mut result: (bool, bool);
     let mut guess: Option<u8>;
+    let mut feedback: &str;
     let mut stop: bool = false;
     let mut user_input: String = String::new();
     
@@ -91,15 +92,15 @@ pub fn run_self() {
         result = evaluate_guess(&guess, &to_guess);
 
         match result {
-            (true, false) => println!("Your guess is too low!"),
-            (false, true) => println!("Your guess is too high!"),
+            (true, false) => feedback = "too low!",
+            (false, true) => feedback = "too high!",
             (false, false) => {
-                println!("Congrats, you guessed the number!");
+                feedback = "correct! Congrats!";
                 stop = true;
             },
-            (true, true) => println!("Please choose a number between {} and {}", 
-                                     u8::MIN,
-                                     u8::MAX)
+            (true, true) => feedback = "incorrect."
         }
+
+        println!("Your guess is {}", feedback)
     }
 }

@@ -45,7 +45,7 @@ fn generate_random_number() -> u8 {
 /// guess = None;
 /// evaluate_guess(&guess, &to_guess); // -> (true, true)
 /// ```
-fn evaluate_guess(guess: Option<u8>, to_guess: &u8) -> (bool, bool) {
+fn evaluate_guess(guess: &Option<u8>, to_guess: &u8) -> (bool, bool) {
     return guess.map(|num| (num < *to_guess, num > *to_guess))
                 // If the guess is None then both will be set to `true`.
                 .or(Some((true, true)))
@@ -83,14 +83,23 @@ pub fn run_self() {
 
         println!("Enter your guess ({} - {}):", u8::MIN, u8::MAX);
 
+        // TODO(JBierenbroodspot): Make function maybe?
         guess = stdin.read_line(&mut user_input)
                      .ok()
                      .and(guess_to_u8(&(user_input.trim())));
 
-        result = evaluate_guess(guess, &to_guess);
+        result = evaluate_guess(&guess, &to_guess);
 
-        println!("The result is {:?}", result);
-        println!("The random number is {}", to_guess);
-        stop = true;
+        match result {
+            (true, false) => println!("Your guess is too low!"),
+            (false, true) => println!("Your guess is too high!"),
+            (false, false) => {
+                println!("Congrats, you guessed the number!");
+                stop = true;
+            },
+            (true, true) => println!("Please choose a number between {} and {}", 
+                                     u8::MIN,
+                                     u8::MAX)
+        }
     }
 }

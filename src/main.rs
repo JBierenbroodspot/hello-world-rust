@@ -22,6 +22,7 @@ fn get_selection(selection: &str) -> Option<fn()> {
     // String returned by `read_line()` include a trailing newline character.
     match selection.trim() {
         "1" => {return Some(hello_world_but_in_another_file::run_self);},
+        "2" => {return Some(guess_the_number::run_self);},
         _   => return None
     }
 }

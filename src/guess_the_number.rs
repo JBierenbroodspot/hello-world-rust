@@ -47,6 +47,7 @@ fn generate_random_number() -> u8 {
 /// ```
 fn evaluate_guess(guess: Option<u8>, to_guess: &u8) -> (bool, bool) {
     return guess.map(|num| (num < *to_guess, num > *to_guess))
+                // If the guess is None then both will be set to `true`.
                 .or(Some((true, true)))
                 // Won't panic because this will always evaluate to `Some()`.
                 .unwrap();
@@ -57,8 +58,8 @@ fn evaluate_guess(guess: Option<u8>, to_guess: &u8) -> (bool, bool) {
 /// 
 /// # Arguments
 /// 
-/// * `guess` - A borrowed string, or `None`, that can be parsed into an 
-///             unsigned 8 bit integer.
+/// * `guess` - A borrowed string that can be parsed into an unsigned 8 bit 
+///             integer.
 /// 
 /// # Return value
 /// 
@@ -72,10 +73,10 @@ pub fn run_self() {
     let stdin: io::Stdin = io::stdin();
     let to_guess: u8 = generate_random_number();
 
-    let mut stop: bool = false;
-    let mut user_input: String = String::new();
     let mut result: (bool, bool);
     let mut guess: Option<u8>;
+    let mut stop: bool = false;
+    let mut user_input: String = String::new();
     
     while stop != true {
         user_input.clear();

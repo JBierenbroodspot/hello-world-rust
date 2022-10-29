@@ -72,6 +72,7 @@ fn guess_to_u8(guess: &str) -> Option<u8> {
 pub fn run_self() {
     let stdin: io::Stdin = io::stdin();
     let to_guess: u8 = generate_random_number();
+    let guesses_left: u8 = 8;
 
     let mut result: (bool, bool);
     let mut guess: Option<u8>;
@@ -82,6 +83,11 @@ pub fn run_self() {
     while stop != true {
         user_input.clear();
 
+        if guesses_left == 0 {
+            println!("You lost! The correct number was: {}", to_guess);
+        }
+        
+        println!("You have {} guess(es) left", guesses_left);
         println!("Enter your guess ({} - {}):", u8::MIN, u8::MAX);
 
         // TODO(JBierenbroodspot): Make function maybe?
@@ -98,7 +104,9 @@ pub fn run_self() {
                 feedback = "correct! Congrats!";
                 stop = true;
             },
-            (true, true) => feedback = "incorrect."
+            (true, true) => {
+                continue;
+            }
         }
 
         println!("Your guess is {}", feedback)

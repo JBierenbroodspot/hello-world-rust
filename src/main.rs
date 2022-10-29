@@ -36,7 +36,7 @@ fn get_from_fn_map<'a>(key: &str,
 fn main() -> io::Result<()> {
     let stdin: io::Stdin = io::stdin();
 
-    let mut user_input: String;
+    let mut user_input: String = String::new();
     let mut app: Option<&fn()> = None;
 
     let mut function_map: FunctionMap = collections::HashMap::new();
@@ -45,7 +45,7 @@ fn main() -> io::Result<()> {
 
     
     while app.is_none() {
-        user_input = String::new();
+        user_input.clear();
 
         // `stdin.read_line` returns a `io::Result` which is comparable to 
         // Haskell's `Maybe` monad. A `Result` contains either a success value
@@ -58,7 +58,8 @@ fn main() -> io::Result<()> {
                    // of type `Some(T)`. Otherwise it id ignored and the value
                    // of the previous statement will be returned, which will be
                    // `None`.
-                   .and(get_from_fn_map(&user_input, &function_map));
+                   .and(get_from_fn_map(&(user_input.trim()), 
+                                             &function_map));
     }
 
     if let Some(some_app) = app {

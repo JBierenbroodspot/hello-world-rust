@@ -10,9 +10,10 @@ fn generate_random_number() -> u8 {
     return rng.gen();
 }
 
-/// Compares two unsigned 8 bit integers.
+/// Compares two borrowed unsigned 8 bit integers.
 /// 
-/// This function takes a guess and a number to guess and compares them.
+/// This function takes an optional `u8` and a non-optional `u8` and compares 
+/// them. 
 /// 
 /// # Arguments
 /// 
@@ -21,15 +22,34 @@ fn generate_random_number() -> u8 {
 /// 
 /// # Return value
 /// 
-/// If `guess` is larger than `to_guess` 1 is returned,
-/// if `guess` is smaller than `to_guess` 0 is returned,
-/// otherwise 2 is returned.
-fn evaluate_guess(guess: u8, to_guess: u8) -> u8 {
-    if guess > to_guess {return 1;}
-
-    if guess < to_guess {return 0;}
-
-    return 2;
+/// The return value is a tuple of two booleans, the left boolean stands for 
+/// `guess < to_guess` and the right one stands for `guess > to_guess`. That
+/// that if return value is `(true, false)` it means that `guess` is smaller 
+/// than `to_guess`. If both are `true` it means something has gone wrong since
+/// it is impossible for a value to be both above and below another. If both are
+/// `false` it means the numbers are equal.
+/// 
+/// # Example
+/// 
+/// ```
+/// let mut guess: Option<u8> = Some(50);
+/// let mut to_guess: u8 = 60;
+/// evaluate_guess(&guess, &to_guess); // -> (true, false)
+/// 
+/// guess = Some(100);
+/// evaluate_guess(&guess, &to_guess); // -> (false, true)
+/// 
+/// guess = Some(60);
+/// evaluate_guess(&guess, &to_guess); // -> (false, false)
+/// 
+/// guess = None;
+/// evaluate_guess(&guess, &to_guess); // -> (true, true)
+/// ```
+fn evaluate_guess(guess: Option<&u8>, to_guess: &u8) -> (bool, bool) {
+    return guess.map(|num| (num < to_guess, num > to_guess))
+                .or(Some((true, true)))
+                // Won't panic because this will always evaluate to `Some()`.
+                .unwrap();
 }
 
 /// Converts string to a unsigned 8 bit integer.
@@ -57,14 +77,6 @@ pub fn run_self() {
     while stop != true {
         user_input = String::new();
 
-        // `stdin.read_line` returns a `io::Result` which is comparable to 
-        // Haskell's `Maybe` monad. A `Result` contains either a success value
-        // or an error value.
-        match stdin.read_line(&mut user_input) {
-            Err(_) => stop = false,
-            Ok(_) => {
- 
-            }
-        }
+        
     }
 }

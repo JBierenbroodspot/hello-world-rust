@@ -58,8 +58,7 @@ fn main() -> io::Result<()> {
                    // of type `Some(T)`. Otherwise it id ignored and the value
                    // of the previous statement will be returned, which will be
                    // `None`.
-                   .and(get_from_fn_map(&user_input, 
-                                           &function_map));
+                   .and(get_from_fn_map(&user_input, &function_map));
     }
 
     if let Some(some_app) = app {

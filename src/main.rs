@@ -1,7 +1,7 @@
 use std::io;
 
-pub mod hello_world_but_in_another_file;
-pub mod guess_the_number;
+mod hello_world_but_in_another_file;
+mod guess_the_number;
 
 /// Takes a `&str` and runs a function based on specific matching values.
 /// 
@@ -16,17 +16,14 @@ pub mod guess_the_number;
 /// 
 /// If a function is successfully executed `true` is returned, otherwise `false`
 /// is returned.
-fn run_selection(selection: &str) -> bool {
-
+fn get_selection(selection: &str) -> Option<fn()> {
     // TODO(JBierenbroodspot): Find a way to store which module to use so it can
     //                         be ran outside of the main loop.
     // String returned by `read_line()` include a trailing newline character.
     match selection.trim() {
-        "1" => hello_world_but_in_another_file::run_self(),
-        _   => return false
+        "1" => {return Some(hello_world_but_in_another_file::run_self);},
+        _   => return None
     }
-
-    return true;
 }
 
 fn main() -> io::Result<()> {
@@ -34,6 +31,7 @@ fn main() -> io::Result<()> {
 
     let mut stop: bool = false;
     let mut user_input: String;
+    let mut app: Option<fn()> = None;
     
     while stop != true {
         user_input = String::new();
@@ -42,9 +40,16 @@ fn main() -> io::Result<()> {
         // Haskell's `Maybe` monad. A `Result` contains either a success value
         // or an error value.
         match stdin.read_line(&mut user_input) {
-            Err(_) => stop = true,
-            Ok(_) => stop = run_selection(&user_input)
+            Err(_) => stop = false,
+            Ok(_) => {
+                app = get_selection(&user_input); 
+                stop = !app.is_none();
+            }
         }
+    }
+
+    if let Some(some_app) = app {
+        (some_app)();
     }
 
     Ok(())
